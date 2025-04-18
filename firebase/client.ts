@@ -4,7 +4,7 @@ import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyABDEHAs2p5og4BA1bux4RcpUuIhDmCg4U",
+  apiKey: process.env.GOOGLE_API_KEY,,
   authDomain: "mock-interview-platform-dd187.firebaseapp.com",
   projectId: "mock-interview-platform-dd187",
   storageBucket: "mock-interview-platform-dd187.firebasestorage.app",
