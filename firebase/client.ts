@@ -4,12 +4,12 @@ import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyABDEHAs2p5og4BA1bux4RcpUuIhDmCg4U",
-  authDomain: "mock-interview-platform-dd187.firebaseapp.com",
-  projectId: "mock-interview-platform-dd187",
-  storageBucket: "mock-interview-platform-dd187.firebasestorage.app",
-  messagingSenderId: "26686476825",
-  appId: "1:26686476825:web:b08d019b75d6edb4e75088"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
 // Initialize app once
