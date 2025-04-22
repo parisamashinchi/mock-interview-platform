@@ -92,7 +92,7 @@ export async function getUser() {
   const cookie = await cookies();
   const sessionCookie = cookie.get("session");
   if (!sessionCookie) {
-    return false;
+    return null;
   }
     // Verify the session cookie
   try {
@@ -107,10 +107,10 @@ export async function getUser() {
       return null;
     }
     // Return the user data
-    return { ...user.data(), id: user.id };
+    return { ...user.data(), id: user.id } as User;
 
   } catch (error: any) {
-    return false;
+    return null;
   }
 }
 
