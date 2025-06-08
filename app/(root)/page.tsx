@@ -2,10 +2,21 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import React from "react";
-import { dummyInterviews } from "@/constants";
 import InterviewCard from "@/components/InterviewCard";
+import { getUser } from "@/lib/actions/auth.action";
+import { getInterviewsByUserId, getLatestInterviews } from "@/lib/actions/global.actions";
 
-const HomePage = () => {
+const HomePage = async () => {
+  const user = await getUser();
+
+  const [userInterviews, latestInterview] = await Promise.all ([
+    getInterviewsByUserId(user?.id as string),
+    getLatestInterviews({userId : user?.id as string})
+  ])
+
+  const hadInterview = userInterviews.length > 0;
+  const hadLatestInterview = latestInterview.length > 0;
+
   return (
     <>
       <div className="card-cta">
@@ -41,19 +52,26 @@ const HomePage = () => {
       <section className="flex flex-col gap-4 ">
         <h2>Your interview</h2>
         <div className="flex flex-row gap-4  w-full items-stretch max-lg:flex-col">
-          {dummyInterviews.map((interview) => (
-            <InterviewCard {...interview} key={interview.id} />
-          ))}
+          {hadInterview ? (
+            userInterviews.map((interview) => (
+              <InterviewCard {...interview} key={interview.id} />
+            ))
+          ) : (
+            <p>You have not taken any interview yet</p>
+          )}
         </div>
       </section>
       <section className="flex flex-col gap-4 ">
         <h2>Take an interview</h2>
         <div className="flex flex-row gap-4">
-        {dummyInterviews.map((interview:Interview)=>(
-            <InterviewCard {...interview} key={interview.id} />
-          ))}
+        {hadLatestInterview ? (
+            latestInterview.map((interview) => (
+              <InterviewCard {...interview} key={interview.id} />
+            ))
+          ) : (
+            <p>There are no new InterviewCard</p>
+          )}
         </div>
-        <p>You don&apos;t take an interview yet</p>
       </section>
     </>
   );

@@ -94,7 +94,7 @@ export async function getUser() {
   if (!sessionCookie) {
     return null;
   }
-    // Verify the session cookie
+  // Verify the session cookie
   try {
     const decodedClaims = await auth.verifySessionCookie(
       sessionCookie.value,
@@ -108,14 +108,14 @@ export async function getUser() {
     }
     // Return the user data
     return { ...user.data(), id: user.id } as User;
-
   } catch (error: any) {
     return null;
   }
 }
 
 export async function isAuthenticated() {
-    // Check if the user is authenticated
+  // Check if the user is authenticated
   const user = await getUser();
   return user ? true : false;
 }
+

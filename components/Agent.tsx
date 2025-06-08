@@ -1,9 +1,10 @@
-"use client"
+"use client";
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { vapi } from "@/lib/vapi.sdk";
+import { interviewer } from "@/constants";
 
 enum InterviewStatus {
   active = "active",
@@ -17,7 +18,13 @@ interface MessageProps {
   content: string;
 }
 
-const Agent = ({ userName, userId, type }: AgentProps) => {
+const Agent = ({
+  userName,
+  userId,
+  type,
+  interviewId,
+  questions,
+}: AgentProps) => {
   const router = useRouter();
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [interviewStatus, setInterviewStatus] = useState<InterviewStatus>(
@@ -26,7 +33,6 @@ const Agent = ({ userName, userId, type }: AgentProps) => {
   const [message, setMessage] = useState<MessageProps[]>([]);
 
   useEffect(() => {
-
     const onMessage = (message: Message) => {
       if (message.type === "transcript" && message.transcriptType === "final") {
         const newMessage = { role: message.role, content: message.transcript };
@@ -35,7 +41,7 @@ const Agent = ({ userName, userId, type }: AgentProps) => {
         });
       }
     };
-    
+
     const onCallStart = () => {
       setInterviewStatus(InterviewStatus.active);
     };
@@ -75,31 +81,54 @@ const Agent = ({ userName, userId, type }: AgentProps) => {
     };
   }, []);
 
+  const handleGenerateFeedback = async (message: MessageProps[]) => {
+    //ToDO server action to generate feedback
+    const { success, id } = { success: true, id: "feedback-id" };
+    if (success && id) {
+      router.push(`/interview/${interviewId}/feedback`);
+    } else {
+      console.log("error generating feedback");
+      router.push("");
+    }
+  };
+
   useEffect(() => {
     // check if interview is completed
     if (interviewStatus === InterviewStatus.completed) {
-      router.push("/");
+      if (type === "generate") {
+        router.push("/");
+      } else {
+        handleGenerateFeedback(message);
+      }
     }
   }, [userId, InterviewStatus, message, type]);
 
-// start call
+  // start call
   const handleCall = async () => {
     setInterviewStatus(InterviewStatus.connected);
-
-    await vapi.start(process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID, {
-      variableValues: {
-        userid: userId,
-        username: userName,
-      },
-    });
+    if (type === "generate") {
+      await vapi.start(process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID, {
+        variableValues: {
+          userid: userId,
+          username: userName,
+        },
+      });
+    } else {
+      const formattedQuestions = questions?.map((q) =>`- ${q}`).join('\n');
+      await vapi.start(interviewer,{
+        variableValues: {
+          questions: formattedQuestions,
+        }
+      })
+    }
   };
 
   // stop call
   const handleStopCall = () => {
     setInterviewStatus(InterviewStatus.completed);
     vapi.stop();
-  }
-  const latestMessage = message[message.length - 1]?.content
+  };
+  const latestMessage = message[message.length - 1]?.content;
 
   return (
     <>
@@ -130,22 +159,27 @@ const Agent = ({ userName, userId, type }: AgentProps) => {
           <h3>{userName}</h3>
         </div>
       </div>
-      {message.length > 0 &&
-     
-            <div className="border-gradient w-full rounded-2xl p-0.5">
-              <div className="dark-gradient rounded-2xl flex justify-center items-center gap-2 py-4.5 px-4 h-3.5">
-                <p>{latestMessage}</p>
-              </div>
-            </div>
-          }
+      {message.length > 0 && (
+        <div className="border-gradient w-full rounded-2xl p-0.5">
+          <div className="dark-gradient rounded-2xl flex justify-center items-center gap-2 py-4.5 px-4 h-3.5">
+            <p>{latestMessage}</p>
+          </div>
+        </div>
+      )}
       <div className=" flex justify-center w-full">
         {interviewStatus === "active" ? (
-          <button onClick={handleStopCall} className=" inline-block rounded-full px-3.5 py-3 bg-destructive-200 hover:bg-destructive-100 active:bg-destructive-100">
+          <button
+            onClick={handleStopCall}
+            className=" inline-block rounded-full px-3.5 py-3 bg-destructive-200 hover:bg-destructive-100 active:bg-destructive-100"
+          >
             End Interview
           </button>
         ) : (
-          <button onClick={handleCall} className="inline-block rounded-full w-[80px] px-3.5 py-3 bg-success-200 hover:bg-success-100 active:bg-destructive-100">
-            {interviewStatus === "connected"  ? "..." : "Call"}
+          <button
+            onClick={handleCall}
+            className="inline-block rounded-full w-[80px] px-3.5 py-3 bg-success-200 hover:bg-success-100 active:bg-destructive-100"
+          >
+            {interviewStatus === "connected" ? "..." : "Call"}
           </button>
         )}
       </div>
