@@ -102,15 +102,15 @@ const AuthForm = ({ type }: { type: FormType }) => {
   return (
     <div className="card-border lg:m-w-[550px] ">
       <div className="card flex flex-col gap-7 py-15 px-10 ">
-        <div className="flex gap-1 justify-center">
-          <Image src="/logo.svg" alt="logo" width={50} height={50} />
-          <h2 className="text-primary-100">mockInterview</h2>
+        <div className="flex gap-3 justify-center">
+          <Image src="/logo.png" alt="logo" width={50} height={50} />
+          <h2 className="text-light-100">  mock Interview</h2>
         </div>
-        <h3>Prepare for yourself with Mock interview </h3>
+        <h3 className="text-light-100">Prepare for yourself with Mock interview </h3>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-8 form mt-3 w-full"
+            className="space-y-8 form mt-3 w-full text-light-100"
           >
             {!isSignIn && (
               <FormField
@@ -135,12 +135,12 @@ const AuthForm = ({ type }: { type: FormType }) => {
               type="password"
               control={form.control}
             />
-            <Button type="submit" className="btn">
+            <Button type="submit" className="rounded-2xl bg-blue-500">
               {isSignIn ? "sign in" : "sign up"}
             </Button>
           </form>
         </Form>
-        <p>
+        <p className="text-light-100">
           {isSignIn ? "no account yet?" : "already have an account?"}
           <Link
             href={!isSignIn ? "/sign-in" : "/sign-up"}
