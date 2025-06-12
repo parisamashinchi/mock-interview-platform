@@ -29,14 +29,15 @@ An AI-powered job interview platform built with **Next.js**, **Firebase**, **Tai
 ### 1. Clone the Repository
 
 ### 2. install dependency
-    ```bash
+```
 npm install
 ```
 ### 3. Set Up Environment Variables
     Create a .env.local file in the root directory of your project and add the following:
 
 
-```env
+```
+env
 FIREBASE_PROJECT_ID=
 FIREBASE_PRIVATE_KEY=
 FIREBASE_CLIENT_EMAIL=
@@ -54,7 +55,7 @@ NEXT_PUBLIC_VAPI_WORKFLOW_ID=
 🔑 Replace the placeholder values with your actual Firebase, Google Gemini, and Vapi credentials.
 
 ### 4. Run the Development Server
-    ```bash
+```
 npm run dev
 ```
     
