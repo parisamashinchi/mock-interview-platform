@@ -61,15 +61,15 @@ npm run dev
     
 Then open http://localhost:3000 in your browser to use the app.
 
-📝 Notes
+## 📝 Notes
 Ensure Firebase Firestore and Authentication are enabled in your Firebase Console.
 
 Make sure your Vapi workflow is set up with appropriate variables like username.
 
 Enable and configure the Google Gemini API in your Google Cloud Console to get the API key.
 
+## 🤝 Contributions
 
-🤝 Contributions
 Contributions are welcome! Feel free to:
 
 Open issues for bugs or ideas
@@ -79,7 +79,7 @@ Submit pull requests
 Fork and customize the project for your own use
 
 
-👤 Author
+## 👤 Author
 Made with ❤️ by Your Parisa
 
 
